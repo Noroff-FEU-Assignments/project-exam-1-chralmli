@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:3677351,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+      </script>
+    <title>Contact | The Groove Grid</title>
+</head>
+<body>
+        <div class="wrapper">
+            <header>
+                <nav class="site-nav">
+                    <ul class="nav-list sidebar">
+                        <li onclick=hideSidebar()><a href="#"><svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
+                        <li><a href="index.html">The Groove Grid</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                    <ul class="nav-list">
+                        <li><a href="index.html">The Groove Grid</a></li>
+                        <li class="hideOnMobile"><a href="about.html">About</a></li>
+                        <li class="hideOnMobile"><a href="blog.html">Blog</a></li>
+                        <li class="hideOnMobile"><a href="contact.html">Contact</a></li>
+                        <li class="menu-button" onclick=showSidebar()><a href="#"><svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
+                    </ul>
+                </nav>
+            </header>
+
+            <main class="main-content contact-page">
+                <section class="content-section">
+                    <h1>Contact</h1>
+
+                    <!-- Contact Info -->
+                    <div class="contact-info">
+                        <p><strong>Phone:</strong> +1 234 567 890</p>
+                        <p><strong>Email:</strong> contact@groovegrid.com</p>
+                        <p><strong>Address:</strong> 123 Music Lane, Rhythm City</p>
+                        <!-- Social Media Icons -->
+                        <div class="social-media-icons">
+                            <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="contact-container">
+                        <form id="contact-form" class="contact-form">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" placeholder="Full Name">
+
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Email">
+
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" placeholder="Subject">
+
+                            <label for="message">Your Message</label>
+                            <textarea id="message" placeholder="Your Message"></textarea>
+
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                        <div id="form-messages" class="form-messages"></div>
+                    </div>
+                </section>  
+            </main>
+            
+            <footer class="site-footer">
+                <div class="footer-content">
+                    <div class="footer-section about">
+                        <h3>About The Groove Grid</h3>
+                        <p>Exploring the world of rhythm and beats, The Groove Grid is your go-to source for drumming tips, gear reviews, and artist interviews.</p>
+                    </div>
+                    <div class="footer-section links">
+                        <h3>Quick Links</h3>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section contact">
+                        <h3>Contact</h3>
+                        <p><strong>Email:</strong> contact@groovegrid.com</p>
+                        <ul class="social-media">
+                            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2023 The Groove Grid | Designed by Christian Almli</p>
+                </div>
+            </footer>
+        </div>
+
+        <!-- JavaScript Files -->
+        <script src="/js/contact.js"></script>
+        <script src="/js/menuToggle.js"></script>
+</body>
+</html>
