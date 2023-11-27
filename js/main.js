@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function fetchBlogPosts() {
     showLoadingIndicator();
     try {
-        const response = await fetch('http://the-groove-grid.local/wp-json/wp/v2/posts?per_page=20');
+        const response = await fetch('http://christianalmli.no/wp-json/wp/v2/posts?per_page=20');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -50,7 +50,7 @@ function hideLoadingIndicator() {
     // Fetch images
     async function fetchImages(mediaIds) {
         const requests = mediaIds.map(id =>
-            fetch (`http://the-groove-grid.local/wp-json/wp/v2/media/${id}`)
+            fetch (`http://christianalmli.no/wp-json/wp/v2/media/${id}`)
         );
         const responses = await Promise.all(requests);
         const images = await Promise.all(responses.map(res => res.json()));

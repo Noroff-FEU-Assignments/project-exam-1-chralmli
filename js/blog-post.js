@@ -34,7 +34,7 @@ async function fetchData(url) {
 async function fetchAndDisplayPost(postId) {
     try {
         showLoadingIndicator();
-        const post = await fetchData(`http://the-groove-grid.local/wp-json/wp/v2/posts/${postId}`);
+        const post = await fetchData(`https://christianalmli.no/wp-json/wp/v2/posts/${postId}`);
         updateDOMForPost(post);
         // Fetch related posts if categories are available
         if (post.categories.length > 0) {
@@ -79,7 +79,7 @@ async function updateDOMForPost(post) {
 
 async function setHeroImageAndTitle(mediaId, titleText) {
     try {
-        const image = await fetchData(`http://the-groove-grid.local/wp-json/wp/v2/media/${mediaId}`);
+        const image = await fetchData(`https://christianalmli.no/wp-json/wp/v2/media/${mediaId}`);
         // DOM updates for hero image and title
         const heroSection = document.getElementById("hero-section");
         heroSection.style.backgroundImage = `url(${image.source_url})`;
@@ -95,7 +95,7 @@ async function setHeroImageAndTitle(mediaId, titleText) {
 
 async function fetchComments(postId) {
     try {
-        const response = await fetch(`http://the-groove-grid.local/wp-json/wp/v2/comments?post=${postId}`);
+        const response = await fetch(`http://christianalmli.no/wp-json/wp/v2/comments?post=${postId}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -126,7 +126,7 @@ function displayComments(comments) {
 
 async function fetchRelatedPosts(categoryId, currentPostId) {
     try {
-        const posts = await fetchData(`http://the-groove-grid.local/wp-json/wp/v2/posts?categories=${categoryId}&per_page=100`);
+        const posts = await fetchData(`http://christianalmli.no/wp-json/wp/v2/posts?categories=${categoryId}&per_page=100`);
         const relatedPosts = posts.filter(post => post.id.toString() !== currentPostId.toString());
         displayRelatedPosts(relatedPosts);
     } catch (error) {
@@ -164,7 +164,7 @@ async function loadPost(postId, event) {
 
 async function fetchCategories() {
     try {
-        const categories = await fetchData(`http://the-groove-grid.local/wp-json/wp/v2/categories`);
+        const categories = await fetchData(`http://christianalmli.no/wp-json/wp/v2/categories`);
         displayCategories(categories);
     } catch (error) {
         handleError(error);
@@ -188,7 +188,7 @@ async function filterPostsByCategory(categoryId, event) {
     event.preventDefault();
     // Functionality for filtering posts
     try {
-        const posts = await fetchData(`http://the-groove-grid.local/wp-json/wp/v2/posts?categories=${categoryId}`);
+        const posts = await fetchData(`http://christianalmli.no/wp-json/wp/v2/posts?categories=${categoryId}`);
         updatePostsForCategory(posts);
     } catch (error) {
         handleError(error);
@@ -232,7 +232,7 @@ document.getElementById("commentForm").addEventListener("submit", async (event) 
 });
 
 async function postComment(commentData) {
-    const response = await fetch(`http://the-groove-grid.local/wp-json/wp/v2/comments`, {
+    const response = await fetch(`http://christianalmli.no/wp-json/wp/v2/comments`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
