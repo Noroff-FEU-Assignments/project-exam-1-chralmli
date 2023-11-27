@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
 // Fetch posts from the wordpress REST API
 async function fetchPosts(page = 1, categoryId = null) {
     showLoadingIndicator();
-    let url = `http://christianalmli.no/wp-json/wp/v2/posts?page=${page}&per_page=10`;
+    let url = `https://christianalmli.no/wp-json/wp/v2/posts?page=${page}&per_page=10`;
     if (categoryId) {
         url += `&categories=${categoryId}`;
     }
@@ -107,7 +107,7 @@ function hideLoadingIndicator() {
 
 // Fetch featured images for posts
 async function fetchImages(mediaIds) {
-    const requests = mediaIds.map(id => fetch(`http://christianalmli.no/wp-json/wp/v2/media/${id}`));
+    const requests = mediaIds.map(id => fetch(`https://christianalmli.no/wp-json/wp/v2/media/${id}`));
     const responses = await Promise.all(requests);
     const images = await Promise.all(responses.map(res => res.json()));
     return images.reduce((acc, image) => {
@@ -119,7 +119,7 @@ async function fetchImages(mediaIds) {
 // fetch categories and update the category filter dropdown
 async function fetchCategories() {
     try {
-        const response = await fetch("http://christianalmli.no/wp-json/wp/v2/categories");
+        const response = await fetch("https://christianalmli.no/wp-json/wp/v2/categories");
         if (!response.ok) {
             throw new Error (`HTTP error! Status: ${response.status}`);
         } 
@@ -149,7 +149,7 @@ function populateCategoryFilter() {
 // Fetch authors data
 async function fetchAuthors() {
     try {
-        const response = await fetch("http://christianalmli.no/wp-json/wp/v2/users");
+        const response = await fetch("https://christianalmli.no/wp-json/wp/v2/users");
         const authorsData = await response.json();
         authors = authorsData.reduce((acc, author) => {
             acc[author.id] = author.name;
@@ -198,7 +198,7 @@ async function filterPostsByCategory(categoryId) {
 
     // Fetch posts filtered by category
     try {
-        const url = `http://christianalmli.no/wp-json/wp/v2/posts?categories=${categoryId}&per_page=10`;
+        const url = `https://christianalmli.no/wp-json/wp/v2/posts?categories=${categoryId}&per_page=10`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
