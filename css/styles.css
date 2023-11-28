@@ -19,8 +19,16 @@
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body, input, button {
     font-family: var(--main-font);
+}
+
+.cta-btn {
+    font-weight: bold;
 }
 
 /* Wrapper */
@@ -80,7 +88,6 @@ nav ul {
     align-items: center;
     justify-content: flex-end;
     list-style: none;
-    gap: 1rem;
 }
 
 nav li {
@@ -91,10 +98,11 @@ nav a {
     height: 100%;
     display: flex;
     align-items: center;
-   color: white;
+    color: white;
     text-decoration: none;
     padding: 0 30px;
-    transition: color 0.3s;
+    transition: background-color 0.3s;
+    border-top: solid 1px rgba(210, 210, 210, 0.3);
 }
 
 nav a:hover {
@@ -112,9 +120,8 @@ nav li:first-child {
     height: 100vh;
     width: 250px;
     z-index: 999;
-    background-color: rgba(255, 255, 255, 0.396);
+    background-color: rgba(30, 30, 30, 0.8);
     backdrop-filter: blur(10px);
-    box-shadow: -10 0 10px rgba(0, 0, 0, 0.5);
     display: none;
     flex-direction: column;
     align-items: flex-start;
@@ -178,7 +185,7 @@ nav li:first-child {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    min-height: 100vh;
 }
 
 .hero-section {
@@ -216,6 +223,22 @@ nav li:first-child {
     margin-bottom: 2rem;
     text-align: left;
     font-style: italic;
+}
+
+.scroll-down-arrow {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    left: 50%;
+    right: 50%;
+    cursor: pointer;
+    font-size: 3rem;
+    color: var(--primary-color);
+    transition: transform 0.3s ease-in-out;
+}
+
+.scroll-down-arrow:hover {
+    transform: translateY(5px);
 }
 
 /* Responsive hero */
@@ -348,7 +371,7 @@ nav li:first-child {
     text-overflow: ellipsis;
     word-wrap: break-word;
     margin: 0 0 1rem 0;
-    line-height: 1.2;
+    line-height: 1.5;
 }
 
 .post-excerpt p,
@@ -362,6 +385,8 @@ nav li:first-child {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    line-height: 1.6;
+    word-wrap: break-word;
 }
 
 /* default WordPress theme read-more btn need to be removed */
@@ -374,8 +399,8 @@ p.more-link {
     display: inline-block;
     margin-top: auto;
     padding: 10px 15px;
-    background-color: transparent;
-    color: #b3982f;
+    background-color: var(--primary-color);
+    color: var(--dark-background);
     text-decoration: none;
     border: 1px solid #d4af37;
     border-radius: 5px;
@@ -410,9 +435,6 @@ a.title-link:hover {
     width: 50px;
     height: 50px;
     font-size: 32px;
-    /* position: absolute; */
-    /* top: 50%;
-    transform: translateY(-50%); */
     background-color: var(--light-background);
     border: none;
     cursor: pointer;
@@ -431,26 +453,6 @@ a.title-link:hover {
     .carousel-item {
         flex: 0 0 100%;
         max-width: 100%;
-    }
-}
-
-@media (max-width: 600px) {
-    .carousel-item h4 {
-        font-size: smaller;
-    }
-    
-    .carousel-item .post-excerpt {
-        font-size: smaller;
-    }
-}
-
-@media (max-width: 400px) {
-    .carousel-item h4 {
-        font-size: smallest;
-    }
-
-    .carousel-item .post-excerpt {
-        font-size: smallest;
     }
 }
 
@@ -973,11 +975,20 @@ p.role {
 
 #categoryFilter,
 #searchInput {
-    padding: 10px 15px;
+    padding: 10px;
     border-radius: 5px;
+    appearance: none;
+    cursor: pointer;
     border: 1px solid #ccc;
     background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+#categoryFilter:hover,
+#searchInput:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #categoryFilter {
@@ -988,13 +999,18 @@ p.role {
     margin-right: 2rem;
 }
 
+#searchInput::placeholder {
+    color: var(--dark-background);
+}
+
 .blog-content-container, .posts-grid, .posts-grid-item {
     border-radius: 20px;
 }
 
 .posts-grid {
     display: grid;
-    gap: 2rem;
+    margin-top: 4rem;
+    gap: 4rem;
     padding: 2rem;
     justify-content: center;
 }
@@ -1036,13 +1052,14 @@ p.role {
     flex-grow: 1;
 }
 
-.posts-grid-item a {
-    /* background-color: #d4af37; */
-    color: #b3982f;
+.posts-grid-item .read-more-btn {
+    background-color: var(--primary-color);
+    color: var(--dark-background);
     text-decoration: underline;
     border-radius: 5px;
     align-self: flex-end;
     transition: background-color 0.2s;
+    font-weight: bold;
 }
 
 a.post-title-link {
@@ -1057,7 +1074,7 @@ a.post-title-link:hover {
 }
 
 .posts-grid-item a:hover {
-    font-weight: bold;
+    background-color: #b3982f;
 }
 
 .post-image-container {
@@ -1288,6 +1305,11 @@ a.post-title-link:hover {
 }
 
 /* Blog Post Page */
+.blog-main {
+    margin-bottom: 8rem;
+    margin-top: 8rem;
+}
+
 .blog-post-page {
     display: flex;
     max-width: 1200px;
@@ -1299,6 +1321,7 @@ a.post-title-link:hover {
 .content-section {
     max-width: 1200px;
     margin: auto;
+    margin-bottom: 12rem;
 }
 
 .post-and-comments {

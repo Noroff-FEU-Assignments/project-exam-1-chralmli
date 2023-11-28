@@ -177,7 +177,7 @@ function displayPosts(posts) {
             <a class="post-title-link" href="blog-post.html?post_id=${post.id}"<h3>${post.title.rendered}</h3></a>
             <p class="posts-author-category">${categoryAndAuthor}</p>
             <p class="posts-excerpt">${post.excerpt.rendered}</p>
-            <a href="blog-post.html?post_id=${post.id}">Read More</a>
+            <a class="read-more-btn" href="blog-post.html?post_id=${post.id}">Read More</a>
         </div>
     </div>
     `;

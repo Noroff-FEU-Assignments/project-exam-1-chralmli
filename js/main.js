@@ -86,7 +86,7 @@ function hideLoadingIndicator() {
                 <h4>${post.title.rendered}</h4>
             </a>
             <span class="post-excerpt">${post.excerpt.rendered}</span>
-            <a href="blog-post.html?post_id=${post.id}" class="read-more-btn">Read More</a>
+            <a href="blog-post.html?post_id=${post.id}" class="read-more-btn cta-btn">Read More</a>
             `;
 
             carouselItem.appendChild(itemContent);
