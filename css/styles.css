@@ -65,6 +65,12 @@ h4 { font-size: 1.2rem; }
 }
 
 /* Header */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+
+}
 /* Hamburger Menu and Navigation */
 .brand-container {
     display: flex;
@@ -770,6 +776,10 @@ p.role {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.feature h3 {
+    margin-bottom: 2rem;
+}
+
 .feature:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
@@ -802,12 +812,25 @@ p.role {
 
 @media (max-width: 768px) {
 
+    .about-wrapper {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
     .about-hero-section {
         height: 40vh;
     }
 
     .team-members, .contact-details, .community-features {
         grid-template-columns: 1fr;
+    }
+
+    .about-hero-section p {
+        font-size: 1.2rem;
+    }
+    
+    .detail, .feature {
+        padding: 0.5rem;
     }
 }
 
