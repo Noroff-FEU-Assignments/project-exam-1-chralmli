@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
         currentPage = 1;
         currentPosts = [];
         const selectedCategory = event.target.value === "all" ? null : event.target.value;
-        // filterPostsByCategory(event.target.value);
         fetchPosts(1, selectedCategory);
     });
 
@@ -36,6 +35,13 @@ document.addEventListener("DOMContentLoaded", function() {
         searchPosts(event.target.value);
     });
 });
+
+function handleError(error) {
+    console.error("An error occurred:", error);
+    // Implement user-friendly error message
+    const errorElement = document.getElementById("error-message");
+    errorElement.textContent = "An error occurred. Please try again later.";
+}
 
 // Fetch posts from the wordpress REST API
 async function fetchPosts(page = 1, categoryId = null) {
@@ -245,3 +251,6 @@ function searchPosts(searchTerm) {
     const filteredPosts = currentPosts.filter(post => post.title.rendered.toLowerCase().includes(lowerCaseSearchTerm));
     displayPosts(filteredPosts);
 }
+
+
+

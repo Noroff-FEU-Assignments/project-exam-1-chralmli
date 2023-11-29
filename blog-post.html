@@ -46,16 +46,21 @@
         <main class="main-content blog-post-page">
             <div id="loading-indicator" class="loading-indicator"></div>
             <div class="post-and-comments">
+                <div class="back-to-blog">
+                    <a href="/blog.html" class="back-button">← Back to Blog List</a>
+                </div>                
                 <div id="post-container" class="post-content"></div>
-                <section class="comment-form">
-                    <h3>Leave a Comment</h3>
-                    <form id="commentForm">
-                        <input type="text" id="commentAuthor" placeholder="Your Name" required>
-                        <input type="email" id="commentEmail" placeholder="Your Email" required>
-                        <textarea id="commentText" placeholder="Your Comment" required></textarea>
-                        <button type="submit">Post Comment</button>
-                    </form>
-                </section>
+                <div class="comment-section-wrapper">
+                    <section class="comment-form">
+                        <h3>Leave a Comment</h3>
+                        <form id="commentForm">
+                            <input type="text" id="commentAuthor" placeholder="Your Name" required>
+                            <input type="email" id="commentEmail" placeholder="Your Email" required>
+                            <textarea id="commentText" placeholder="Your Comment" required></textarea>
+                            <button type="submit">Post Comment</button>
+                        </form>
+                    </section>
+                </div>
             </div>
             <aside class="post-sidebar">
                 <div class="categories"></div>

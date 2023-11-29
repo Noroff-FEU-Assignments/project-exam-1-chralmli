@@ -225,19 +225,19 @@ nav li:first-child {
     font-style: italic;
 }
 
-.scroll-down-arrow {
+.arrow-wrapper {
     position: absolute;
     bottom: 30px;
-    right: 30px;
-    left: 50%;
-    right: 50%;
+}
+
+a.scroll-down-arrow {
     cursor: pointer;
     font-size: 3rem;
     color: var(--primary-color);
     transition: transform 0.3s ease-in-out;
 }
 
-.scroll-down-arrow:hover {
+a.scroll-down-arrow:hover {
     transform: translateY(5px);
 }
 
@@ -395,7 +395,7 @@ p.more-link {
 }
 
 /* New read more btn */
-.read-more-btn {
+a.read-more-btn {
     display: inline-block;
     margin-top: auto;
     padding: 10px 15px;
@@ -408,9 +408,8 @@ p.more-link {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.read-more-btn:hover {
+a.read-more-btn:hover {
     background-color: #b3982f;
-    color: white;
 }
 
 a.title-link {
@@ -1073,10 +1072,6 @@ a.post-title-link:hover {
     text-decoration: underline;
 }
 
-.posts-grid-item a:hover {
-    background-color: #b3982f;
-}
-
 .post-image-container {
     width: 40%;
     overflow: hidden;
@@ -1187,7 +1182,7 @@ a.post-title-link:hover {
     background-color: #292929;
     padding: 2rem;
     border-radius: 8px;
-    margin-bottom: 2rem;
+    margin: 0 1rem 1rem 1rem;
     text-align: center;
     font-size: 1.1rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
@@ -1220,6 +1215,7 @@ a.post-title-link:hover {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     overflow: hidden;
+    margin: 0 1rem;
 }
 
 .contact-form {
@@ -1316,6 +1312,24 @@ a.post-title-link:hover {
     margin: auto;
     margin-top: 4rem;
     margin-bottom: 4rem;
+}
+
+.back-to-blog {
+    margin: 2rem 0 2rem 1rem;
+}
+
+.back-button {
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #e1e1e1;
 }
 
 .content-section {
@@ -1424,6 +1438,9 @@ h3.wp-block-heading {
 }
 
 /* Comment Form */
+.comment-section-wrapper {
+    padding: 2rem;
+}
 .comment-form {
     width: 100%;
     padding: 1rem;

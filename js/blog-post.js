@@ -1,36 +1,22 @@
 
-let postContainer, heroSection, sidebar, categoriesDiv;
+// Global variables
+let postContainer, heroSection, sidebar;
 let urlParams = new URLSearchParams(window.location.search);
+
+// Initialize the page
 document.addEventListener("DOMContentLoaded", async function() {
     postContainer = document.getElementById("post-container");
     heroSection = document.getElementById("hero-section");
     sidebar = document.querySelector(".post-sidebar");
-    categoriesDiv = document.querySelector(".categories");
 
 
     const postId = urlParams.get("post_id");
-    postId ? await fetchAndDisplayPost(postId) : "";
-    fetchCategories().catch(handleError);
+    if (postId) {
+        await fetchAndDisplayPost(postId);
+    }
 });
 
-function showLoadingIndicator() {
-    const loadingIndicator = document.getElementById("loading-indicator");
-    loadingIndicator.style.display = "block";
-}
-
-function hideLoadingIndicator() {
-    const loadingIndicator = document.getElementById("loading-indicator");
-    loadingIndicator.style.display = "none";
-}
-
-async function fetchData(url) {
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-}
-
+// Fetch and display post
 async function fetchAndDisplayPost(postId) {
     try {
         showLoadingIndicator();
@@ -45,38 +31,61 @@ async function fetchAndDisplayPost(postId) {
     }
 }
 
+// Update the DOM with the post's content
+async function updateDOMForPost(post) {
+    clearContent();
+    updateTitle(post.title.rendered);
+    if (post.featured_media) {
+        await setHeroImageAndTitle(post.featured_media, post.title.rendered);
+    }
+    addPostContent(post.content.rendered);
+    const comments = await fetchComments(post.id);
+    displayComments(comments);
+    hideLoadingIndicator();
+}
 
+// Utility functions
+function showLoadingIndicator() {
+    const loadingIndicator = document.getElementById("loading-indicator");
+    loadingIndicator.style.display = "block";
+}
+function hideLoadingIndicator() {
+    const loadingIndicator = document.getElementById("loading-indicator");
+    loadingIndicator.style.display = "none";
+}
+async function fetchData(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+}
+function handleError(error) {
+    console.error("An error occurred:", error);
+    // Implement user-friendly error message
+    const errorElement = document.getElementById("error-message");
+    errorElement.textContent = "An error occurred. Please try again later.";
+}
+function clearContent() {
+    postContainer.innerHTML = "";
+    heroSection.innerHTML = "";
+}
+function updateTitle(titleHtml) {
+    const decodedTitle = decodeHtmlEntities(titleHtml);
+    document.title = `The Groove Grid | ${decodedTitle}`;
+}
+function addPostContent(contentHtml) {
+    const content = document.createElement("div");
+    content.innerHTML = contentHtml;
+    postContainer.appendChild(content);
+}
 function decodeHtmlEntities(text) {
     let textArea = document.createElement("textarea");
     textArea.innerHTML = text;
     return textArea.textContent;
 }
 
-// Update the DOM with the post's content
-async function updateDOMForPost(post) {
-    // Clear existing content
-    postContainer.innerHTML = "";
-    heroSection.innerHTML = "";
-
-    // Decoding title
-    const decodedTitle = decodeHtmlEntities(post.title.rendered);
-    document.title = `The Groove Grid | ${decodedTitle}`;
-
-    // Set hero image and title
-    if (post.featured_media) {
-        setHeroImageAndTitle(post.featured_media, decodedTitle);
-    }
-
-    const content = document.createElement("div");
-    content.innerHTML = post.content.rendered;
-    postContainer.appendChild(content);
-
-    // Fetch and display comments
-    const comments = await fetchComments(post.id);
-    displayComments(comments);
-    hideLoadingIndicator();
-}
-
+// Hero image and title
 async function setHeroImageAndTitle(mediaId, titleText) {
     try {
         const image = await fetchData(`https://christianalmli.no/wp-json/wp/v2/media/${mediaId}`);
@@ -93,6 +102,7 @@ async function setHeroImageAndTitle(mediaId, titleText) {
     }
 }
 
+// Comments functionality
 async function fetchComments(postId) {
     try {
         const response = await fetch(`https://christianalmli.no/wp-json/wp/v2/comments?post=${postId}`);
@@ -106,6 +116,12 @@ async function fetchComments(postId) {
 }
 
 function displayComments(comments) {
+    // Clear existing comments
+    const existingCommentsSection = postContainer.querySelector(".comment-section");
+    if (existingCommentsSection) {
+        existingCommentsSection.remove();
+    }
+    
     if (!comments || comments.length === 0) return;
 
     const commentsSection = document.createElement("div");
@@ -124,6 +140,8 @@ function displayComments(comments) {
     postContainer.appendChild(commentsSection);
 }
 
+
+// Related posts functionality
 async function fetchRelatedPosts(categoryId, currentPostId) {
     try {
         const posts = await fetchData(`https://christianalmli.no/wp-json/wp/v2/posts?categories=${categoryId}&per_page=100`);
@@ -155,6 +173,7 @@ function displayRelatedPosts(posts) {
     sidebar.appendChild(relatedPostsDiv);
 }
 
+// Load specific post
 async function loadPost(postId, event) {
     event.preventDefault();
     showLoadingIndicator();
@@ -162,81 +181,41 @@ async function loadPost(postId, event) {
     window.history.pushState({}, "", `blog-post.html?post_id=${postId}`);
 }
 
-async function fetchCategories() {
-    try {
-        const categories = await fetchData(`https://christianalmli.no/wp-json/wp/v2/categories`);
-        displayCategories(categories);
-    } catch (error) {
-        handleError(error);
-    }
-}
-
-function displayCategories(categories) {
-    // DOM updates for categories
-    const categoriesDiv = document.querySelector(".categories");
-    let html = "<h3>Categories</h3><ul>";
-
-    categories.forEach(category => {
-        html += `<li><a href="blog.html?category_id=${category.id}" onclick="filterPostsByCategory(${category.id}, event)">${category.name}</a></li>`;
-    });
-
-    html += "</ul>";
-    categoriesDiv.innerHTML = html;
-}
-
-async function filterPostsByCategory(categoryId, event) {
-    event.preventDefault();
-    // Functionality for filtering posts
-    try {
-        const posts = await fetchData(`https://christianalmli.no/wp-json/wp/v2/posts?categories=${categoryId}`);
-        updatePostsForCategory(posts);
-    } catch (error) {
-        handleError(error);
-    }
-    console.log(`Filtering posts by category: ${categoryId}`);
-}
-
-function updatePostsForCategory(posts) {
-
-}
-
-function handleError(error) {
-    console.error("An error occurred:", error);
-    // Implement user-friendly error message
-    const errorElement = document.getElementById("error-message");
-    errorElement.textContent = "An error occurred. Please try again later.";
-}
-
+// Comment form submission
 document.getElementById("commentForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     
     const postId = urlParams.get("post_id");
-    const authorName = document.getElementById("commentAuthor").value;
-    const authorEmail = document.getElementById("commentEmail").value;
-    const commentContent = document.getElementById("commentText").value;
-
-    const commentData = {
-        post: postId,
-        author_name: authorName,
-        author_email: authorEmail,
-        content: commentContent
-    };
+    const commentData = getCommentFormData(postId);
 
     try {
         await postComment(commentData);
         alert("Comment submitted successfully!");
+        const updatedComments = await fetchComments(postId);
+        displayComments(updatedComments);
     } catch (error) {
         console.error("Error posting comment:", error);
         alert("Failed to submit comment.");
     }
 });
 
+function getCommentFormData(postId) {
+    const authorName = document.getElementById("commentAuthor").value;
+    const authorEmail = document.getElementById("commentEmail").value;
+    const commentContent = document.getElementById("commentText").value;
+    return {
+        post: postId,
+        author_name: authorName,
+        author_email: authorEmail,
+        content: commentContent
+    }
+}
+
 async function postComment(commentData) {
     const response = await fetch(`https://christianalmli.no/wp-json/wp/v2/comments`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
-        // Add authentication headers if required
     },
     body: JSON.stringify(commentData)
     });
