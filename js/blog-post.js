@@ -29,11 +29,12 @@ async function fetchAndDisplayPost(postId) {
         }
         addPostContent(post.content.rendered);
 
-        // updateDOMForPost(post);
         // Fetch related posts if categories are available
         if (post.categories.length > 0) {
             fetchRelatedPosts(post.categories[0], postId)
         }
+
+        // fetch comments
         const comments = await fetchComments(post.id);
         displayComments(comments);
 
@@ -44,19 +45,6 @@ async function fetchAndDisplayPost(postId) {
     } finally {
         hideLoadingIndicator();
     }
-}
-
-// Update the DOM with the post's content
-async function updateDOMForPost(post) {
-    clearContent();
-    updateTitle(post.title.rendered);
-    if (post.featured_media) {
-        await setHeroImageAndTitle(post.featured_media, post.title.rendered);
-    }
-    addPostContent(post.content.rendered);
-    const comments = await fetchComments(post.id);
-    displayComments(comments);
-    hideLoadingIndicator();
 }
 
 // Utility functions
@@ -143,6 +131,7 @@ async function fetchComments(postId) {
         return await response.json();
     } catch (error) {
         console.error("Error fetching comments:", error);
+        handleError(error);
     }
 }
 

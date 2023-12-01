@@ -36,6 +36,20 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Error fetching data from ${url}:`, error);
+        handleError(error);
+        return null;
+    }
+}
+
 function handleError(error) {
     console.error("An error occurred:", error);
     // Implement user-friendly error message
@@ -56,10 +70,14 @@ async function fetchPosts(page = 1, categoryId = null) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
         totalPostsAvailable = parseInt(response.headers.get("X-WP-Total"));
-        
         const newPosts = await response.json();
+
+        if (!newPosts) {
+            hideLoadingIndicator();
+            return;
+        }
+            
         currentPosts = [...currentPosts, ...newPosts];
 
         // Process media IDs to fetch images
@@ -72,17 +90,15 @@ async function fetchPosts(page = 1, categoryId = null) {
                 }
             });
         }
-
+    
         displayPosts(currentPosts);
 
         // Update loadMoreBtn visibility
         updateLoadMoreBtnVisibility();
-
-        // Update DOM with new posts
-        hideLoadingIndicator();
     } catch (error) {
         console.error("Error fetching posts:", error);
         hideLoadingIndicator();
+        handleError();
     }
 }
 
@@ -124,21 +140,15 @@ async function fetchImages(mediaIds) {
 
 // fetch categories and update the category filter dropdown
 async function fetchCategories() {
-    try {
-        const response = await fetch("https://christianalmli.no/wp-json/wp/v2/categories");
-        if (!response.ok) {
-            throw new Error (`HTTP error! Status: ${response.status}`);
-        } 
-        const categoriesData = await response.json();
+    const categoriesData = await fetchData("https://christianalmli.no/wp-json/wp/v2/categories");
+    if (!categoriesData) return;
+
         categories = categoriesData.reduce((acc, category) => {
             acc[category.id] = category.name;
             return acc;
         }, {});
 
         populateCategoryFilter();
-    } catch (error) {
-        console.error("Error fetching categories:", error);
-    }
 }
 
 // Populate the category filter dropdown with category options
@@ -154,16 +164,13 @@ function populateCategoryFilter() {
 
 // Fetch authors data
 async function fetchAuthors() {
-    try {
-        const response = await fetch("https://christianalmli.no/wp-json/wp/v2/users");
-        const authorsData = await response.json();
+    const authorsData = await fetchData("https://christianalmli.no/wp-json/wp/v2/users");
+    if (!authorsData) return;
+
         authors = authorsData.reduce((acc, author) => {
             acc[author.id] = author.name;
             return acc;
         }, {});
-    } catch (error) {
-        console.error("Error fetching authors:", error);
-    }
 }
 
 // Display posts
@@ -231,6 +238,7 @@ async function filterPostsByCategory(categoryId) {
         hideLoadingIndicator();
     } catch (error) {
         console.error("Error fetching filtered posts:", error);
+        handleError();
         hideLoadingIndicator();
     }   
 }
