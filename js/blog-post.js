@@ -20,14 +20,29 @@ document.addEventListener("DOMContentLoaded", async function() {
 async function fetchAndDisplayPost(postId) {
     try {
         showLoadingIndicator();
+        clearContent();
+
         const post = await fetchData(`https://christianalmli.no/wp-json/wp/v2/posts/${postId}`);
-        updateDOMForPost(post);
+        updateTitle(post.title.rendered);
+        if (post.featured_media) {
+            await setHeroImageAndTitle(post.featured_media, post.title.rendered);
+        }
+        addPostContent(post.content.rendered);
+
+        // updateDOMForPost(post);
         // Fetch related posts if categories are available
         if (post.categories.length > 0) {
-            fetchRelatedPosts(post.categories[0], postId).catch(handleError);
+            fetchRelatedPosts(post.categories[0], postId)
         }
+        const comments = await fetchComments(post.id);
+        displayComments(comments);
+
     } catch (error) {
         handleError(error);
+        clearContent();
+        return;
+    } finally {
+        hideLoadingIndicator();
     }
 }
 
@@ -46,11 +61,11 @@ async function updateDOMForPost(post) {
 
 // Utility functions
 function showLoadingIndicator() {
-    const loadingIndicator = document.getElementById("loading-indicator");
+    const loadingIndicator = document.getElementById("loadingIndicator");
     loadingIndicator.style.display = "block";
 }
 function hideLoadingIndicator() {
-    const loadingIndicator = document.getElementById("loading-indicator");
+    const loadingIndicator = document.getElementById("loadingIndicator");
     loadingIndicator.style.display = "none";
 }
 async function fetchData(url) {
@@ -65,20 +80,35 @@ function handleError(error) {
     // Implement user-friendly error message
     const errorElement = document.getElementById("error-message");
     errorElement.textContent = "An error occurred. Please try again later.";
+    hideLoadingIndicator();
+    clearContent();
 }
+
 function clearContent() {
     postContainer.innerHTML = "";
     heroSection.innerHTML = "";
 }
+
 function updateTitle(titleHtml) {
     const decodedTitle = decodeHtmlEntities(titleHtml);
     document.title = `The Groove Grid | ${decodedTitle}`;
 }
-function addPostContent(contentHtml) {
+
+function addPostContent(contentHtml) { 
     const content = document.createElement("div");
     content.innerHTML = contentHtml;
     postContainer.appendChild(content);
+
+    // Make images clickable to open in a modal
+    const images = content.getElementsByTagName("img");
+    for (let img of images) {
+        img.style.cursor = "pointer";
+        img.addEventListener("click", function() {
+            openModal(img.src);
+        });
+    }
 }
+
 function decodeHtmlEntities(text) {
     let textArea = document.createElement("textarea");
     textArea.innerHTML = text;
@@ -91,6 +121,7 @@ async function setHeroImageAndTitle(mediaId, titleText) {
         const image = await fetchData(`https://christianalmli.no/wp-json/wp/v2/media/${mediaId}`);
         // DOM updates for hero image and title
         const heroSection = document.getElementById("hero-section");
+
         heroSection.style.backgroundImage = `url(${image.source_url})`;
 
         const title = document.createElement("h1");
@@ -121,7 +152,7 @@ function displayComments(comments) {
     if (existingCommentsSection) {
         existingCommentsSection.remove();
     }
-    
+
     if (!comments || comments.length === 0) return;
 
     const commentsSection = document.createElement("div");
@@ -225,4 +256,33 @@ async function postComment(commentData) {
     }
 
     return await response.json();
+}
+
+function openModal(imageSrc) {
+    const modalBg = document.createElement("div");
+    modalBg.className = "modal-background";
+
+    const modalContent = document.createElement("div");
+    modalContent.className = "modal-content";
+
+    const modalImg = document.createElement("img");
+    modalImg.src = imageSrc;
+
+    // Append elements
+    modalContent.appendChild(modalImg);
+    modalBg.appendChild(modalContent);
+    document.body.appendChild(modalBg);
+
+    document.querySelector("main").classList.add("blur-effect");
+
+    // Show the modal
+    modalBg.style.display = "block";
+
+    // Close modal if user clicks outside the image
+    modalBg.addEventListener("click", function(event) {
+        if (event.target === modalBg || event.target === modalImg) {
+            modalBg.remove();
+            document.querySelector("main").classList.remove("blur-effect");
+        }
+    })
 }

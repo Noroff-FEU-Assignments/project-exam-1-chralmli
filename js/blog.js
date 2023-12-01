@@ -177,7 +177,7 @@ function displayPosts(posts) {
         return `
     <div class="posts-grid-item">
         <div class="post-image-container">
-        ${post.image_url ? `<img src="${post.image_url}" alt="${post.title.rendered}">` : ""}
+        ${post.image_url ? `<img src="${post.image_url}" loading="lazy" alt="${post.title.rendered}">` : ""}
         </div>
         <div class="posts-grid-content">
             <a class="post-title-link" href="blog-post.html?post_id=${post.id}"<h3>${post.title.rendered}</h3></a>
