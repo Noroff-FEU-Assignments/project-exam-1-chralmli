@@ -210,9 +210,11 @@ document.getElementById("commentForm").addEventListener("submit", async (event) 
 
     try {
         await postComment(commentData);
-        alert("Comment submitted successfully!");
+        alert("Thank you! Your comment has been posted.");
         const updatedComments = await fetchComments(postId);
         displayComments(updatedComments);
+
+        document.getElementById("commentForm").reset();
     } catch (error) {
         console.error("Error posting comment:", error);
         alert("Failed to submit comment.");

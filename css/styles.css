@@ -832,6 +832,10 @@ p.role {
     .detail, .feature {
         padding: 0.5rem;
     }
+
+    .about-page-section h2 {
+        font-size: 1.7rem;
+    }
 }
 
 /* Subscription Section*/
@@ -995,6 +999,10 @@ p.role {
     border-radius: 10px;
 }
 
+.search-container {
+    position: relative;
+}
+
 #categoryFilter,
 #searchInput {
     padding: 10px;
@@ -1023,6 +1031,31 @@ p.role {
 
 #searchInput::placeholder {
     color: var(--dark-background);
+}
+
+.search-suggestions {
+    position: absolute;
+    z-index: 1000;
+    width: calc(100% - 20px);
+    max-height: 300px;
+    overflow-y: auto;
+    background: white;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+    top: 100%;
+    left: 0;
+    border: 1px solid #ccc;
+}
+
+.search-suggestions p {
+    padding: 10px;
+    margin: 0;
+    cursor: pointer;
+    color: #333;
+}
+
+.search-suggestions p:hover {
+    background-color: #f2f2f2;
 }
 
 .blog-content-container, .posts-grid, .posts-grid-item {
@@ -1072,6 +1105,17 @@ p.role {
 .posts-grid-item p {
     font-size: 1rem;
     flex-grow: 1;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.posts-grid-item .more-link {
+    display: none;
 }
 
 .posts-grid-item .read-more-btn {

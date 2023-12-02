@@ -253,12 +253,94 @@ function updateLoadMoreBtn(headers) {
     }
 }
 
-// Search posts based on user input
+// Search posts based on user input and show suggestions
 function searchPosts(searchTerm) {
-    const lowerCaseSearchTerm = searchTerm.toLowerCase();
-    const filteredPosts = currentPosts.filter(post => post.title.rendered.toLowerCase().includes(lowerCaseSearchTerm));
-    displayPosts(filteredPosts);
+    const normalizedSearchTerm = searchTerm.toLowerCase();
+    const suggestionsDropdown = document.getElementById("searchSuggestions");
+
+    if (normalizedSearchTerm) {
+        // Compile suggestions for titles and categories
+        const titleSuggestions = getSuggestionsByTitle(currentPosts, normalizedSearchTerm);
+        const categorySuggestions = getSuggestionsByCategory(categories, normalizedSearchTerm);
+
+        // Populate and display suggestions in the dropdown
+        populateSuggestionsDropdown(suggestionsDropdown, titleSuggestions, "post");
+        populateSuggestionsDropdown(suggestionsDropdown, categorySuggestions, "category");
+
+        toggleDropdownDisplay(suggestionsDropdown, titleSuggestions, categorySuggestions);
+    } else {
+        // Reset suggestions
+        resetSuggestions(suggestionsDropdown);
+        displayPosts(currentPosts);
+    }
 }
 
+function resetSuggestions(dropdown) {
+    dropdown.innerHTML = "";
+    dropdown.style.display = "none";
+}
 
+function getSuggestionsByTitle(posts, searchTerm) {
+    return posts.filter(post =>
+        post.title.rendered.toLowerCase().includes(searchTerm)
+        ).slice(0, 5);
+}
 
+function getSuggestionsByCategory(categoryObj, searchTerm) {
+    return Object.entries(categoryObj)
+        .filter(([_, name]) => name.toLowerCase().includes(searchTerm))
+        .slice(0, 5);
+}
+
+function populateSuggestionsDropdown(dropdown, suggestions, type) {
+    suggestions.forEach(suggestion => {
+        const element = document.createElement("p");
+        element.textContent = type === "post" ? suggestion.title.rendered : `Category: ${suggestion[1]}`;
+        element.addEventListener("click", () => {
+            if (type === "post") {
+                displayPosts([suggestion]);
+            } else {
+                const categoryId = suggestion[0];
+                displayPosts(currentPosts.filter(post => post.categories.includes(Number(categoryId))));
+            }
+            dropdown.style.display = "none";
+        });
+        dropdown.appendChild(element);
+    });
+}
+
+function toggleDropdownDisplay(dropdown, titleSuggestions, categorySuggestions) {
+    if (titleSuggestions.length > 0 || categorySuggestions.length > 0) {
+        dropdown.style.display = "block";
+    }
+}
+
+document.addEventListener("click", function(event) {
+    const searchInput = document.getElementById("searchInput");
+    const searchSuggestions = document.getElementById("searchSuggestions");
+
+    if (!searchInput.contains(event.target) && !searchSuggestions.contains(event.target)) {
+        resetSuggestions(searchSuggestions);
+    }
+});
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("click", function(event) {
+    event.stopPropagation();
+});
+
+searchSuggestions.addEventListener("click", function(event) {
+    event.stopPropagation();
+})
+
+// Call searchPosts when backspace is pressed and input becomes empty
+searchInput.addEventListener("keyup", function(event) {
+    if (event.key === "Backspace") {
+        searchPosts(this.value);
+    }
+});
+
+searchInput.addEventListener("input", function(event) {
+    searchPosts(this.value);
+});
