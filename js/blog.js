@@ -254,13 +254,16 @@ function updateLoadMoreBtn(headers) {
 }
 
 // Search posts based on user input and show suggestions
-function searchPosts(searchTerm) {
+async function searchPosts(searchTerm) {
     const normalizedSearchTerm = searchTerm.toLowerCase();
     const suggestionsDropdown = document.getElementById("searchSuggestions");
 
     if (normalizedSearchTerm) {
+        // Fetch posts based on search term
+        const searchResults = await fetchPostsBySearchTerm(normalizedSearchTerm);
+
         // Compile suggestions for titles and categories
-        const titleSuggestions = getSuggestionsByTitle(currentPosts, normalizedSearchTerm);
+        const titleSuggestions = getSuggestionsByTitle(searchResults, normalizedSearchTerm);
         const categorySuggestions = getSuggestionsByCategory(categories, normalizedSearchTerm);
 
         // Populate and display suggestions in the dropdown
@@ -272,6 +275,21 @@ function searchPosts(searchTerm) {
         // Reset suggestions
         resetSuggestions(suggestionsDropdown);
         displayPosts(currentPosts);
+    }
+}
+
+async function fetchPostsBySearchTerm(searchTerm) {
+    const url = `https://christianalmli.no/wp-json/wp/v2/posts?search=${encodeURIComponent(searchTerm)}&per_page=10`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Error fetching posts for search term "${searchTerm}":`, error);
+        handleError();
+        return [];
     }
 }
 
