@@ -109,11 +109,6 @@ function hideLoadingIndicator() {
         carouselContent.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
 
-    // Display user-friendly error messages
-    function displayErrorMessage(message) {
-
-    }
-
     // Setup carousel navigation and event listeners
     function setupCarousel() {
         document.querySelector(".prev-button").addEventListener("click", () => moveCarousel(-1));

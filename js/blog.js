@@ -96,7 +96,6 @@ async function fetchPosts(page = 1, categoryId = null) {
         // Update loadMoreBtn visibility
         updateLoadMoreBtnVisibility();
     } catch (error) {
-        console.error("Error fetching posts:", error);
         hideLoadingIndicator();
         handleError();
     }
