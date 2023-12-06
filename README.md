@@ -36,7 +36,7 @@ This is a personal academic project, and contributions are not being accepted at
 ## Contact
 - [My LinkedIn](www.linkedin.com/in/christian-almli-4b82b8196)
 
-##Acknowledgments
+## Acknowledgments
 - Special thanks to my tutors and peers for their support and feedback.
 - Hotjar for providing insights into user interaction.
 
