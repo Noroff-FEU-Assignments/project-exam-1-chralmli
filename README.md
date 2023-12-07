@@ -1,5 +1,7 @@
 # Project Exam 1 - Blog Site
 
+![Project Image](/images/compressed/groove-grid-mockup.jpg)
+
 ## Overview
 
 This project showcases the skills developed during the first year of study by creating a blog site. The website features various pages including Home, About, Blog, Specific Blog Post, and Contact pages, implementing advanced web technologies and a seamless user experience.
